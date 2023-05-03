@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="800.0" stylesheets="/styles.css" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
+
+    <right>
+        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <bottom>
+                <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+                    <children>
+                        <Button alignment="CENTER" mnemonicParsing="false" prefWidth="125.0" text="Добавить контроль">
+                            <HBox.margin>
+                                <Insets bottom="20.0" top="20.0"/>
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+            </bottom>
+            <center>
+                <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <content>
+                        <VBox alignment="CENTER" prefWidth="198.0" spacing="5.0">
+                            <children>
+                                <HBox alignment="CENTER" prefWidth="200.0" spacing="5.0">
+                                    <children>
+                                        <TextField alignment="CENTER" prefWidth="42.0" promptText="X1"/>
+                                        <TextField alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="42.0"
+                                                   promptText="Y1"/>
+                                        <TextField alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="42.0"
+                                                   promptText="X2"/>
+                                        <TextField alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="42.0"
+                                                   promptText="Y2"/>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                    </padding>
+                                </HBox>
+                                <Button mnemonicParsing="false" prefWidth="125.0" text="Захватить"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="15.0" left="5.0" right="5.0" top="15.0"/>
+                            </padding>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </right>
+    <center>
+        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <bottom>
+                <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+                    <children>
+                        <Button alignment="CENTER" mnemonicParsing="false" prefWidth="100.0" text="&lt;--  Назад">
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="20.0" right="30.0" top="20.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" prefWidth="100.0" text="Вперёд  --&gt;">
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="20.0" right="30.0" top="20.0"/>
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+            </bottom>
+            <center>
+                <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>
