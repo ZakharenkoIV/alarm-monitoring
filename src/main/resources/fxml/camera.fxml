@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
             prefWidth="800.0" stylesheets="/styles.css" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.example.monitoring.controller.ButtonCaptureController">
 
     <right>
         <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -27,13 +28,14 @@
                             <children>
                                 <HBox alignment="CENTER" prefWidth="200.0" spacing="5.0">
                                     <children>
-                                        <TextField alignment="CENTER" prefWidth="42.0" promptText="X1"/>
+                                        <TextField alignment="CENTER" prefWidth="42.0" promptText="X1"
+                                                   fx:id="x1TextField"/>
+                                        <TextField fx:id="y1TextField" alignment="CENTER" layoutX="10.0" layoutY="10.0"
+                                                   prefWidth="42.0" promptText="Y1"/>
                                         <TextField alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="42.0"
-                                                   promptText="Y1"/>
-                                        <TextField alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="42.0"
-                                                   promptText="X2"/>
-                                        <TextField alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="42.0"
-                                                   promptText="Y2"/>
+                                                   promptText="X2" fx:id="x2TextField"/>
+                                        <TextField fx:id="y2TextField" alignment="CENTER" layoutX="10.0" layoutY="10.0"
+                                                   prefWidth="42.0" promptText="Y2"/>
                                     </children>
                                     <VBox.margin>
                                         <Insets/>
@@ -42,7 +44,8 @@
                                         <Insets bottom="5.0" left="5.0" right="5.0"/>
                                     </padding>
                                 </HBox>
-                                <Button mnemonicParsing="false" prefWidth="125.0" text="Захватить"/>
+                                <Button mnemonicParsing="false" onAction="#handleCaptureButtonAction" prefWidth="125.0"
+                                        text="Захватить"/>
                             </children>
                             <padding>
                                 <Insets bottom="15.0" left="5.0" right="5.0" top="15.0"/>
@@ -72,7 +75,8 @@
                 </HBox>
             </bottom>
             <center>
-                <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                <Pane fx:id="camera" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
+                </Pane>
             </center>
         </BorderPane>
     </center>
