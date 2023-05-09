@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane fx:id="root" stylesheets="/css/login.css" xmlns="http://javafx.com/javafx/11.0.1"
+           xmlns:fx="http://javafx.com/fxml/1">
+    <GridPane alignment="center" hgap="10" vgap="10">
+        <Label text="Логин:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="Пароль:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <HBox alignment="center" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" prefWidth="85.0" text="Вход"/>
+        </HBox>
+    </GridPane>
+</StackPane>

@@ -4,9 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-            prefWidth="800.0" stylesheets="/styles.css" xmlns="http://javafx.com/javafx/11.0.1"
+            prefWidth="800.0" stylesheets="/css/camera.css" xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.example.monitoring.controller.CameraController">
-
     <right>
         <BorderPane fx:id="borderPaneControl" prefHeight="200.0" prefWidth="213.0" BorderPane.alignment="CENTER">
             <bottom>
