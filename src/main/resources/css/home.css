@@ -1,0 +1,7 @@
+.button.setting-button-img {
+    -fx-background-image: url("/image/setting.png");
+}
+
+.button.camera-button-img {
+    -fx-background-image: url("/image/camera.png");
+}

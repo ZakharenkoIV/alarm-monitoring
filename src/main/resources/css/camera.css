@@ -9,3 +9,7 @@
 .button.unlock-button-img {
     -fx-background-image: url("/image/unlock.png");
 }
+
+.button.home-button-img {
+    -fx-background-image: url("/image/home.png");
+}
