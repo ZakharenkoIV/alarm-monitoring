@@ -6,9 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 public class SettingTableRow {
 
     private final SimpleStringProperty description;
-    private final SimpleStringProperty  sensor;
-    private final SimpleStringProperty  minSetPoint;
-    private final SimpleStringProperty  maxSetPoint;
+    private final SimpleStringProperty sensor;
+    private final SimpleStringProperty minSetPoint;
+    private final SimpleStringProperty maxSetPoint;
     private final SimpleBooleanProperty isEnabled;
 
     public SettingTableRow(String description, String sensor, String minSetPoint, String maxSetPoint, Boolean isEnabled) {
@@ -57,5 +57,14 @@ public class SettingTableRow {
 
     public void setEnabled(Boolean enabled) {
         isEnabled.setValue(enabled);
+    }
+
+    @Override
+    public String toString() {
+        return description.get() +
+                " -> " + sensor.getValue() +
+                " -> " + minSetPoint.getValue() +
+                " -> " + maxSetPoint.getValue() +
+                " -> " + isEnabled.getValue().toString();
     }
 }
