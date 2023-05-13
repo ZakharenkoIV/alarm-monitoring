@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import ru.example.monitoring.data.Capture;
 import ru.example.monitoring.data.VBoxCaptureFactory;
+import ru.example.monitoring.handler.HandlerManager;
 import ru.example.monitoring.handler.button.CaptureButtonHandler;
 import ru.example.monitoring.handler.button.LockButtonHandler;
 import ru.example.monitoring.repository.mem.CaptureMem;
@@ -15,11 +16,19 @@ import java.util.Optional;
 
 public class CameraController {
     @FXML
-    BorderPane borderPaneControl;
+    private BorderPane borderPaneControl;
     @FXML
-    Button lockButton;
+    private Button lockButton;
     @FXML
-    VBox scrollVBoxControl;
+    private VBox scrollVBoxControl;
+
+    private final VBoxCaptureFactory vBoxCaptureFactory;
+    private final HandlerManager handlerManager;
+
+    public CameraController(HandlerManager handlerManager) {
+        this.handlerManager = handlerManager;
+        this.vBoxCaptureFactory = new VBoxCaptureFactory(this);
+    }
 
     @FXML
     public void handleCaptureButtonAction(ActionEvent buttonEvent) {
@@ -32,7 +41,7 @@ public class CameraController {
     @FXML
     public void handleAddNewCaptureButtonAction(ActionEvent buttonEvent) {
         Button clickedButton = (Button) buttonEvent.getSource();
-        VBox newCaptureControlBox = VBoxCaptureFactory.createNewControlBox(clickedButton);
+        VBox newCaptureControlBox = vBoxCaptureFactory.createNewControlBox(clickedButton);
         scrollVBoxControl.getChildren().add(newCaptureControlBox);
         String captureId = newCaptureControlBox.getId().substring(12);
         Optional<Capture> optionalCapture = Optional.ofNullable(CaptureMem.getCapture(captureId));
@@ -44,5 +53,10 @@ public class CameraController {
     @FXML
     public void handleLockButtonAction() {
         new LockButtonHandler().handle(lockButton, borderPaneControl);
+    }
+
+    @FXML
+    public void handleHomeButtonAction() {
+        handlerManager.getHomeButton().handle();
     }
 }

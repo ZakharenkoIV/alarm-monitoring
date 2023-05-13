@@ -1,13 +1,10 @@
 package ru.example.monitoring;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
+import ru.example.monitoring.handler.HandlerManager;
+import ru.example.monitoring.loader.PageLoader;
+import ru.example.monitoring.navigation.NavigationManager;
 
 public class Main extends Application {
 
@@ -16,19 +13,18 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("Alarm monitoring");
         primaryStage.setMinWidth(817);
         primaryStage.setMinHeight(639);
 
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/fxml/camera.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
+        HandlerManager handlerManager = new HandlerManager();
+        PageLoader pageLoader = new PageLoader(handlerManager);
+        NavigationManager navigation = new NavigationManager(pageLoader);
+        navigation.loadStartScene("login");
+        handlerManager.loadButtonHandlers(navigation);
 
-        // Отображаем сцену
-        Scene scene = new Scene(root, 800, 600);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(navigation.getScene());
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> System.exit(0));
     }

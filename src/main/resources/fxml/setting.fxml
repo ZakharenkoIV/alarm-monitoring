@@ -1,60 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="/css/setting.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-             <TableView fx:id="tableView" prefHeight="600.0" prefWidth="800.0">
-                 <columns>
-                     <TableColumn prefWidth="200.0" text="Контролируемый элемент (датчик)" />
-                     <TableColumn prefWidth="200.0" text="Минимальная уставка" />
-                     <TableColumn prefWidth="200.0" text="Максимальная уставка" />
-                 </columns>
-                 <columnResizePolicy>
-                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                 </columnResizePolicy>
-             </TableView>
-         </content>
-      </ScrollPane>
-   </center>
-   <left>
-      <Pane prefWidth="25.0" BorderPane.alignment="CENTER" />
-   </left>
-   <right>
-      <Pane prefWidth="25.0" BorderPane.alignment="CENTER" />
-   </right>
-   <bottom>
-      <HBox prefHeight="100.0" BorderPane.alignment="CENTER">
-         <children>
-         </children></HBox>
-   </bottom>
-   <top>
-      <BorderPane BorderPane.alignment="CENTER">
-         <center>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Таблица уставок" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-               <BorderPane.margin>
-                  <Insets bottom="40.0" top="40.0" />
-               </BorderPane.margin>
-            </Label>
-         </center>
-         <left>
-            <BorderPane prefWidth="100.0" BorderPane.alignment="CENTER">
-               <center>
-                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="home-button-img" BorderPane.alignment="CENTER" />
-               </center>
-            </BorderPane>
-         </left>
-         <right>
-            <BorderPane prefWidth="100.0" BorderPane.alignment="CENTER" />
-         </right>
-      </BorderPane>
-   </top>
+<?import javafx.scene.text.Font?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="800.0" stylesheets="/css/setting.css" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.example.monitoring.controller.SettingController">
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" maxWidth="1500.0" prefHeight="200.0" prefWidth="200.0"
+                    BorderPane.alignment="CENTER">
+            <content>
+                <TableView fx:id="settingTable" prefHeight="600.0" prefWidth="800.0">
+                    <columns>
+                        <TableColumn fx:id="descriptionColumn" minWidth="100.0" prefWidth="-1.0" text="Описание"/>
+                        <TableColumn fx:id="sensorColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0"
+                                     text="Датчик"/>
+                        <TableColumn fx:id="minSetPointColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0"
+                                     text="Мин. уставка"/>
+                        <TableColumn fx:id="maxSetPointColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0"
+                                     text="Макс. уставка"/>
+                        <TableColumn fx:id="isEnabledColumn" maxWidth="80.0" minWidth="80.0" text="Активен"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                        </FXCollections>
+                    </items>
+                </TableView>
+            </content>
+        </ScrollPane>
+    </center>
+    <left>
+        <Pane prefWidth="25.0" BorderPane.alignment="CENTER"/>
+    </left>
+    <right>
+        <Pane prefWidth="25.0" BorderPane.alignment="CENTER"/>
+    </right>
+    <top>
+        <BorderPane BorderPane.alignment="CENTER">
+            <center>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Таблица уставок" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="24.0"/>
+                    </font>
+                    <BorderPane.margin>
+                        <Insets bottom="40.0" top="40.0"/>
+                    </BorderPane.margin>
+                </Label>
+            </center>
+        </BorderPane>
+    </top>
+    <bottom>
+        <BorderPane prefHeight="100.0" BorderPane.alignment="CENTER">
+            <right>
+                <BorderPane prefWidth="100.0" BorderPane.alignment="CENTER">
+                    <center>
+                        <Button mnemonicParsing="false" onAction="#handleHomeButtonAction" prefHeight="35.0"
+                                prefWidth="35.0" styleClass="home-button-img" BorderPane.alignment="CENTER"/>
+                    </center>
+                </BorderPane>
+            </right>
+        </BorderPane>
+    </bottom>
 </BorderPane>

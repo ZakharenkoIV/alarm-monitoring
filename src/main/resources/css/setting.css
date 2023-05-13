@@ -1,3 +1,19 @@
 .button.home-button-img {
     -fx-background-image: url("/image/home.png");
 }
+
+#minSetPointColumn {
+    -fx-alignment: CENTER;
+}
+
+#maxSetPointColumn {
+    -fx-alignment: CENTER;
+}
+
+#sensorColumn {
+    -fx-alignment: CENTER;
+}
+
+#isEnabledColumn {
+    -fx-alignment: CENTER;
+}

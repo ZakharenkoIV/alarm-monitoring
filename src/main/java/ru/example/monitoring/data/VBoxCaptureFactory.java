@@ -18,7 +18,13 @@ public class VBoxCaptureFactory {
     private static int controlCount = 0;
     private static int cameraCount = 1;
 
-    public static VBox createNewControlBox(Button clickedButton) {
+    private final CameraController cameraController;
+
+    public VBoxCaptureFactory(CameraController cameraController) {
+        this.cameraController = cameraController;
+    }
+
+    public VBox createNewControlBox(Button clickedButton) {
         controlCount++;
         String captureId = cameraCount + "|" + controlCount;
         Pane camera = (Pane) clickedButton.getScene().lookup("#camera");
@@ -60,7 +66,7 @@ public class VBoxCaptureFactory {
         Button captureButton = new Button("Захватить");
         captureButton.setId("captureButton-" + captureId);
         captureButton.setPrefWidth(149);
-        captureButton.setOnAction(event -> new CameraController().handleCaptureButtonAction(event));
+        captureButton.setOnAction(cameraController::handleCaptureButtonAction);
 
         TextField sensorTextField = new TextField();
         sensorTextField.setPromptText("Датчик");
@@ -80,7 +86,7 @@ public class VBoxCaptureFactory {
         return controlBox;
     }
 
-    public static TextFormatter<String> getLimitToFourDigitsFormatter(int maxValue) {
+    public TextFormatter<String> getLimitToFourDigitsFormatter(int maxValue) {
         return new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
             int maxValueLength = String.valueOf(maxValue).length();
@@ -91,11 +97,11 @@ public class VBoxCaptureFactory {
         });
     }
 
-    private static InvalidationListener getChangeTextFieldListener(String captureId,
-                                                                   TextField x1TextField,
-                                                                   TextField y1TextField,
-                                                                   TextField x2TextField,
-                                                                   TextField y2TextField) {
+    private InvalidationListener getChangeTextFieldListener(String captureId,
+                                                            TextField x1TextField,
+                                                            TextField y1TextField,
+                                                            TextField x2TextField,
+                                                            TextField y2TextField) {
         return observable -> {
             if (!x1TextField.getText().equals("")
                     && !y1TextField.getText().equals("")
