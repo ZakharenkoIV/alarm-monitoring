@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-            prefWidth="800.0" stylesheets="/css/camera.css" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.example.monitoring.controller.CameraController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="/css/camera.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.example.monitoring.controller.CameraController">
     <right>
         <BorderPane fx:id="borderPaneControl" prefHeight="200.0" prefWidth="213.0" BorderPane.alignment="CENTER">
             <bottom>
                 <HBox alignment="CENTER" spacing="17.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleAddNewCaptureButtonAction"
-                                prefWidth="125.0" text="Добавить контроль">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleAddNewCaptureButtonAction" prefWidth="125.0" text="Добавить контроль">
                             <HBox.margin>
-                                <Insets bottom="20.0" top="20.0"/>
+                                <Insets bottom="20.0" top="20.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="lockButton" mnemonicParsing="false" onMousePressed="#handleLockButtonAction"
-                                prefHeight="35.0" prefWidth="35.0" styleClass="unlock-button-img"/>
+                          <Button fx:id="homeButton" mnemonicParsing="false" onAction="#handleHomeButtonAction" prefHeight="35.0" prefWidth="35.0" styleClass="home-button-img" />
                     </children>
                 </HBox>
             </bottom>
@@ -33,7 +30,7 @@
                                 </VBox>
                             </children>
                             <padding>
-                                <Insets bottom="15.0" left="5.0" right="5.0" top="15.0"/>
+                                <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
                             </padding>
                         </VBox>
                     </content>
@@ -44,9 +41,7 @@
     <center>
         <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <center>
-                <Pane fx:id="camera" prefHeight="200.0" prefWidth="200.0"
-                      style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
-                      BorderPane.alignment="CENTER">
+                <Pane fx:id="camera" prefHeight="200.0" prefWidth="200.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" BorderPane.alignment="CENTER">
                 </Pane>
             </center>
             <bottom>
@@ -54,31 +49,34 @@
                     <center>
                         <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                             <children>
-                                <Button alignment="CENTER" mnemonicParsing="false" prefWidth="100.0"
-                                        text="&lt;--  Назад">
+                                <Button alignment="CENTER" minWidth="70.0" mnemonicParsing="false" prefWidth="100.0" text="&lt;--  Назад" onAction="#handleBackButtonAction">
                                     <HBox.margin>
-                                        <Insets bottom="20.0" left="20.0" right="30.0" top="20.0"/>
+                                        <Insets bottom="20.0" left="20.0" right="30.0" top="20.0" />
                                     </HBox.margin>
                                 </Button>
-                                <Button alignment="CENTER" mnemonicParsing="false" prefWidth="100.0"
-                                        text="Вперёд  --&gt;">
+                        <Label text="Камера" fx:id="cameraPageName"/>
+                                <Button alignment="CENTER" minWidth="70.0" mnemonicParsing="false" prefWidth="100.0" text="Вперёд  --&gt;" onAction="#handleForwardButtonAction">
                                     <HBox.margin>
-                                        <Insets bottom="20.0" left="20.0" right="30.0" top="20.0"/>
+                                        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
                                     </HBox.margin>
                                 </Button>
                             </children>
                         </HBox>
                     </center>
                     <right>
-                        <Pane prefWidth="100.0" BorderPane.alignment="CENTER"/>
+                        <Pane prefWidth="60.0" BorderPane.alignment="CENTER" />
                     </right>
                     <left>
-                        <BorderPane prefWidth="100.0" BorderPane.alignment="CENTER">
-                            <center>
-                                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0"
-                                        BorderPane.alignment="CENTER" styleClass="home-button-img"
-                                        onAction="#handleHomeButtonAction"/>
-                            </center>
+                        <BorderPane prefWidth="60.0" BorderPane.alignment="CENTER">
+                     <center>
+                              <Button fx:id="lockButton" mnemonicParsing="false" onMousePressed="#handleLockButtonAction" prefHeight="35.0" prefWidth="35.0" styleClass="unlock-button-img" BorderPane.alignment="CENTER" />
+                     </center>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
                         </BorderPane>
                     </left>
                 </BorderPane>

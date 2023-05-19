@@ -14,25 +14,25 @@ public class LockButtonHandler {
         if (styleClasses.contains("lock-button-img")) {
             styleClasses.remove("lock-button-img");
             styleClasses.add("unlock-button-img");
-            disableButtonsAndTextFieldsExceptLockButton(borderPaneControl, lockButton, false);
+            disableButtonsAndTextFieldsExceptLockButton(borderPaneControl, false);
         } else {
             styleClasses.remove("unlock-button-img");
             styleClasses.add("lock-button-img");
-            disableButtonsAndTextFieldsExceptLockButton(borderPaneControl, lockButton, true);
+            disableButtonsAndTextFieldsExceptLockButton(borderPaneControl, true);
         }
     }
 
-    private void disableButtonsAndTextFieldsExceptLockButton(Parent parent, Button lockButton, Boolean disableButtonsAndTextFields) {
+    private void disableButtonsAndTextFieldsExceptLockButton(Parent parent, Boolean disableButtonsAndTextFields) {
         for (Node node : parent.getChildrenUnmodifiable()) {
             if (node instanceof Button || node instanceof TextField) {
-                if (!(node.getId() != null && node.getId().equals(lockButton.getId()))) {
+                if (!(node.getId() != null && node.getId().equals("homeButton"))) {
                     node.setDisable(disableButtonsAndTextFields);
                 }
             }
             if (node instanceof TextField) {
                 node.setDisable(disableButtonsAndTextFields);
             } else if (node instanceof Parent) {
-                disableButtonsAndTextFieldsExceptLockButton((Parent) node, lockButton, disableButtonsAndTextFields);
+                disableButtonsAndTextFieldsExceptLockButton((Parent) node, disableButtonsAndTextFields);
             }
         }
     }

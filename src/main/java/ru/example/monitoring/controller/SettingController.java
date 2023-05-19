@@ -42,7 +42,7 @@ public class SettingController implements Initializable {
 
     @FXML
     public void handleHomeButtonAction() {
-        handlerManager.getHomeButton().handle();
+        handlerManager.getHomeButtonHandler().handle();
     }
 
     @Override

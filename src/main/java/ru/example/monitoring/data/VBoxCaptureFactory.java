@@ -3,33 +3,39 @@ package ru.example.monitoring.data;
 import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import ru.example.monitoring.controller.CameraController;
-import ru.example.monitoring.handler.button.CaptureButtonHandler;
 import ru.example.monitoring.repository.mem.CaptureMem;
+
+import static ru.example.monitoring.util.CaptureUtil.drawRectangle;
 
 public class VBoxCaptureFactory {
 
-    private static int controlCount = 0;
-    private static int cameraCount = 1;
+    private int controlCount = 0;
+    private final int cameraPageCount;
 
     private final CameraController cameraController;
 
-    public VBoxCaptureFactory(CameraController cameraController) {
+    public VBoxCaptureFactory(CameraController cameraController, int cameraPageCount) {
         this.cameraController = cameraController;
+        this.cameraPageCount = cameraPageCount;
     }
 
     public VBox createNewControlBox(Button clickedButton) {
         controlCount++;
-        String captureId = cameraCount + "|" + controlCount;
-        Pane camera = (Pane) clickedButton.getScene().lookup("#camera");
-        int maxWidth = (int) Double.parseDouble(String.valueOf(camera.getWidth()));
-        int maxHeight = (int) Double.parseDouble(String.valueOf(camera.getHeight()));
+        String captureId = cameraPageCount + "|" + controlCount;
+
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+        int maxWidth = (int) bounds.getWidth();
+        int maxHeight = (int) bounds.getHeight();
 
         TextField x1TextField = new TextField();
         x1TextField.setPromptText("X1");
@@ -55,10 +61,11 @@ public class VBoxCaptureFactory {
         y2TextField.setId(captureId + "|textField|Y2");
         y2TextField.setTextFormatter(getLimitToFourDigitsFormatter(maxHeight));
 
-        x1TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField));
-        y1TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField));
-        x2TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField));
-        y2TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField));
+        Pane camera = (Pane) clickedButton.getScene().lookup("#camera");
+        x1TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField, camera));
+        y1TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField, camera));
+        x2TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField, camera));
+        y2TextField.focusedProperty().addListener(getChangeTextFieldListener(captureId, x1TextField, y1TextField, x2TextField, y2TextField, camera));
 
         HBox coordinatesBox = new HBox();
         coordinatesBox.getChildren().addAll(x1TextField, y1TextField, x2TextField, y2TextField);
@@ -101,14 +108,15 @@ public class VBoxCaptureFactory {
                                                             TextField x1TextField,
                                                             TextField y1TextField,
                                                             TextField x2TextField,
-                                                            TextField y2TextField) {
+                                                            TextField y2TextField,
+                                                            Pane camera) {
         return observable -> {
             if (!x1TextField.getText().equals("")
                     && !y1TextField.getText().equals("")
                     && !x2TextField.getText().equals("")
                     && !y2TextField.getText().equals("")) {
-                Capture capture = CaptureMem.getCapture(captureId);
-                CaptureButtonHandler.drawRectangle(capture);
+                Capture capture = CaptureMem.getCapture(captureId, cameraController.getCameraPageName());
+                drawRectangle(capture, camera);
             }
         };
     }

@@ -2,17 +2,24 @@ package ru.example.monitoring.repository.mem;
 
 import ru.example.monitoring.data.Capture;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CaptureMem {
-    private static final Map<String, Capture> captures = new HashMap<>();
+    private static final Map<String, List<Capture>> captures = new HashMap<>();
 
-    public static Capture getCapture(String captureId) {
-        return captures.get(captureId);
+    public static Capture getCapture(String captureId, String cameraPageName) {
+        return captures.getOrDefault(cameraPageName, Collections.emptyList())
+                .stream()
+                .filter(capture -> capture.getCaptureId().equals(captureId))
+                .findFirst()
+                .orElse(null);
     }
 
-    public static void putCapture(Capture capture) {
-        captures.put(capture.getCaptureId(), capture);
+    public static void putCapture(Capture capture, String cameraPageName) {
+        captures.computeIfAbsent(cameraPageName, key -> new ArrayList<>()).add(capture);
+    }
+
+    public static List<Capture> getCaptureList(String cameraPageName) {
+        return captures.get(cameraPageName);
     }
 }

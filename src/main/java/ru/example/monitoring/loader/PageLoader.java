@@ -2,6 +2,7 @@ package ru.example.monitoring.loader;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import ru.example.monitoring.camera.CameraManager;
 import ru.example.monitoring.controller.CameraController;
 import ru.example.monitoring.controller.HomeController;
 import ru.example.monitoring.controller.LoginController;
@@ -17,9 +18,11 @@ public class PageLoader {
     private final static String PAGE_URL_TEMPLATE = "/fxml/%s.fxml";
 
     private final HandlerManager handlerManager;
+    private final CameraManager cameraManager;
 
-    public PageLoader(HandlerManager handlerManager) {
+    public PageLoader(HandlerManager handlerManager, CameraManager cameraManager) {
         this.handlerManager = handlerManager;
+        this.cameraManager = cameraManager;
     }
 
     public Parent loadPage(String pageName) {
@@ -31,9 +34,9 @@ public class PageLoader {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(pageUrl));
         switch (pageName) {
             case "login" -> loader.setControllerFactory(c -> new LoginController(handlerManager));
-            case "home" -> loader.setControllerFactory(c -> new HomeController(handlerManager));
+            case "home" -> loader.setControllerFactory(c -> new HomeController(handlerManager, cameraManager));
             case "setting" -> loader.setControllerFactory(c -> new SettingController(handlerManager));
-            case "camera" -> loader.setControllerFactory(c -> new CameraController(handlerManager));
+            case "camera" -> loader.setControllerFactory(c -> new CameraController(handlerManager, cameraManager));
             default -> {
                 logger.warning("Неизвестное имя страницы: " + pageName);
                 return null;

@@ -10,6 +10,6 @@ public class CameraButtonHandler {
     }
 
     public void handle() {
-        navigation.navigateTo("camera");
+        navigation.navigateTo(navigation.getFirstCameraName());
     }
 }

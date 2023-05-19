@@ -10,6 +10,8 @@ import javafx.scene.shape.Rectangle;
 public class Capture {
 
     private final String captureId;
+    private double pictureWidth;
+    private double pictureHeight;
 
     private final TextField x1TextField;
     private final TextField y1TextField;
@@ -81,5 +83,21 @@ public class Capture {
 
     public void setRectangle(Rectangle rectangle) {
         this.rectangle = rectangle;
+    }
+
+    public double getPictureWidth() {
+        return pictureWidth;
+    }
+
+    public void setPictureWidth(double pictureWidth) {
+        this.pictureWidth = pictureWidth;
+    }
+
+    public double getPictureHeight() {
+        return pictureHeight;
+    }
+
+    public void setPictureHeight(double pictureHeight) {
+        this.pictureHeight = pictureHeight;
     }
 }

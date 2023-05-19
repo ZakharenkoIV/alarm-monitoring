@@ -20,7 +20,7 @@ public class LoginController {
     @FXML
     public void handleLoginButtonAction() {
         if (usernameField.getText().equals("q") && passwordField.getText().equals("q")) {
-            handlerManager.getHomeButton().handle();
+            handlerManager.getHomeButtonHandler().handle();
         }
     }
 }
