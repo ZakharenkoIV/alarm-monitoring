@@ -1,12 +1,15 @@
 package ru.example.monitoring.camera;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfInt;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
+import ru.example.monitoring.data.CameraScreenshotData;
+import ru.example.monitoring.repository.mem.CaptureMem;
+import ru.example.monitoring.visualprocessing.CameraImageHandler;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -14,9 +17,14 @@ import java.util.List;
 
 public class CameraStreamer {
 
-    private final List<CameraObserver> observers = new ArrayList<>();
+    private final List<CameraObserver> observers;
+    private final CameraImageHandler cameraImageHandler;
+    private final String cameraName;
 
-    public CameraStreamer(int cameraIndex) {
+    public CameraStreamer(String cameraName, CameraImageHandler cameraImageHandler, int cameraIndex) {
+        this.cameraName = cameraName;
+        this.observers = new ArrayList<>();
+        this.cameraImageHandler = cameraImageHandler;
         this.captureVideo(cameraIndex);
     }
 
@@ -24,45 +32,46 @@ public class CameraStreamer {
         observers.add(observer);
     }
 
-    private void notifyObservers(Image image) {
-        for (CameraObserver observer : observers) {
-            observer.update(image);
-        }
-    }
-
     public void captureVideo(int cameraIndex) {
-        VideoCapture videoCapture = new VideoCapture(cameraIndex);
-        videoCapture.set(Videoio.CAP_PROP_FRAME_WIDTH, 1280);
-        videoCapture.set(Videoio.CAP_PROP_FRAME_HEIGHT, 720);
-        if (!videoCapture.isOpened()) {
-            System.out.println("Не удалось открыть веб-камеру.");
-            return;
-        }
-        subscribeToBroadcast(videoCapture);
+        subscribeToBroadcast(new VideoCapture(cameraIndex));
     }
 
+    /**
+     * Опрашивает камеру, отправляет скриншот на страницу отображения
+     * и помещает скриншот в очередь на обработку.
+     *
+     * @param capture Объект подключения к камере.
+     */
     private void subscribeToBroadcast(VideoCapture capture) {
         if (capture.isOpened()) {
             Thread captureThread = new Thread(() -> {
-                long startTime1 = System.currentTimeMillis();
-                long a = 0;
-                Mat frame = new Mat();
                 while (true) {
-                    long startTime = System.currentTimeMillis();
-                    capture.read(frame);
-                    Image image = matToImage(frame);
-                    notifyObservers(image);
-                    a++;
-                    if (startTime - startTime1 > 1000) {
-                        System.out.println(a);
-                        a = 0;
-                        startTime1 = System.currentTimeMillis();
-                    }
+                    Mat frame = new Mat();
+                    //capture.read(frame);
+                    frame = Imgcodecs.imread("src/main/resources/test.jpg");
+                    ImageView imageView = notifyObservers(frame);
+                    CameraScreenshotData screenshotData = new CameraScreenshotData(
+                            frame,
+                            imageView,
+                            CaptureMem.getCaptureListForCameraName(cameraName)
+                    );
+                    cameraImageHandler.imageProducerHandle(() ->
+                            cameraImageHandler.putCameraImage(screenshotData));
                 }
             });
             captureThread.setDaemon(true);
             captureThread.start();
+        } else {
+            System.out.println("Не удалось открыть веб-камеру.");
         }
+    }
+
+    private ImageView notifyObservers(Mat frame) {
+        ImageView imageView = null;
+        for (CameraObserver observer : observers) {
+            imageView = observer.update(matToImage(frame));
+        }
+        return imageView;
     }
 
     private Image matToImage(Mat frame) {

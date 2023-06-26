@@ -22,7 +22,8 @@ public class CameraPane implements CameraObserver {
     }
 
     @Override
-    public void update(Image image) {
+    public ImageView update(Image image) {
         Platform.runLater(() -> imageView.setImage(image));
+        return imageView;
     }
 }

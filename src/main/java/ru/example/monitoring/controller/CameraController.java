@@ -2,6 +2,7 @@ package ru.example.monitoring.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -30,6 +31,8 @@ public class CameraController {
     @FXML
     private Label cameraPageName;
 
+    private ImageView imageView;
+
     private final VBoxCaptureFactory vBoxCaptureFactory;
     private final HandlerManager handlerManager;
 
@@ -44,6 +47,7 @@ public class CameraController {
         imageView.fitWidthProperty().bind(camera.widthProperty());
         imageView.fitHeightProperty().bind(camera.heightProperty());
         camera.getChildren().add(imageView);
+        this.imageView = imageView;
     }
 
     @FXML
@@ -64,7 +68,8 @@ public class CameraController {
         Optional<Capture> optionalCapture = Optional.ofNullable(CaptureMem.getCapture(captureId, cameraPageName.getText()));
         if (optionalCapture.isEmpty()) {
             Capture capture = new Capture(captureId, clickedButton);
-            double[] pictureSize = calculateProportionalSize(camera.getWidth(), camera.getHeight());
+            Bounds bounds = imageView.getBoundsInParent();
+            double[] pictureSize = calculateProportionalSize(bounds.getWidth(), bounds.getHeight(), imageView.getImage());
             capture.setPictureWidth(pictureSize[0]);
             capture.setPictureHeight(pictureSize[1]);
             CaptureMem.putCapture(capture, cameraPageName.getText());
@@ -93,12 +98,22 @@ public class CameraController {
 
     private void addRedrawRectangleListenerForChangeSizeWindow() {
         camera.widthProperty().addListener(
-                (observable, oldValue, newValue) -> drawRectanglesWithNewWidth(
-                        cameraPageName.getText(), oldValue.intValue(), newValue.intValue(), camera));
+                (observable, oldValue, newValue) ->
+                {
+                    Bounds bounds = imageView.getBoundsInParent();
+                    if (bounds.getWidth() >= newValue.intValue()) {
+                        drawRectanglesWithNewWidth(cameraPageName.getText(), bounds, camera, imageView.getImage());
+                    }
+                });
 
         camera.heightProperty().addListener(
-                (observable, oldValue, newValue) -> drawRectanglesWithNewHeight(
-                        cameraPageName.getText(), oldValue.intValue(), newValue.intValue(), camera));
+                (observable, oldValue, newValue) ->
+                {
+                    Bounds bounds = imageView.getBoundsInParent();
+                    if (bounds.getHeight() >= newValue.intValue()) {
+                        drawRectanglesWithNewHeight(cameraPageName.getText(), bounds, camera, imageView.getImage());
+                    }
+                });
     }
 
     public String getCameraPageName() {

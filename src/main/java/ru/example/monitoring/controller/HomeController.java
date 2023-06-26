@@ -57,7 +57,7 @@ public class HomeController {
         List<String> cameras = cameraManager.getCamerasNames();
         comboBox.getItems().addAll(FXCollections.observableArrayList(cameras));
         HBox.setMargin(comboBox, new Insets(0, 40, 0, 0));
-        comboBox.setOnAction(event -> cameraManager.addCameraPage(comboBox));
+        comboBox.setOnAction(event -> cameraManager.addCameraPage(comboBox.getValue()));
 
         Button loadButton = new Button("Загрузить");
         loadButton.setAlignment(Pos.CENTER);

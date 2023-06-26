@@ -2,10 +2,7 @@ package ru.example.monitoring.loader;
 
 import ru.example.monitoring.data.SettingTableRow;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -17,7 +14,7 @@ public class SettingLoader {
         this.fileName = fileName;
     }
 
-    public Collection<SettingTableRow> loadSettings() throws IOException {
+    public Collection<SettingTableRow> loadSettings() {
         Collection<SettingTableRow> settings = new LinkedList<>();
         File file = new File(fileName);
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -25,6 +22,8 @@ public class SettingLoader {
             while ((line = br.readLine()) != null) {
                 settings.add(createSettingTableRow(line));
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return settings;
     }

@@ -7,15 +7,18 @@ import ru.example.monitoring.camera.CameraManager;
 import ru.example.monitoring.handler.HandlerManager;
 import ru.example.monitoring.loader.PageLoader;
 import ru.example.monitoring.navigation.NavigationManager;
+import ru.example.monitoring.visualprocessing.CameraImageHandler;
 
 public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
     }
+
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -24,7 +27,8 @@ public class Main extends Application {
         primaryStage.setMinHeight(639);
 
         HandlerManager handlerManager = new HandlerManager();
-        CameraManager cameraManager = new CameraManager();
+        CameraImageHandler cameraImageHandler = new CameraImageHandler();
+        CameraManager cameraManager = new CameraManager(cameraImageHandler);
         PageLoader pageLoader = new PageLoader(handlerManager, cameraManager);
         NavigationManager navigation = new NavigationManager(pageLoader);
         navigation.loadStartScene("login");

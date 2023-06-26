@@ -54,6 +54,7 @@ public class SettingController implements Initializable {
     }
 
     private void editableCols() {
+        settingTable.setEditable(true);
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         descriptionColumn.setOnEditCommit(event -> {
             SettingTableRow row = event.getRowValue();
@@ -110,7 +111,6 @@ public class SettingController implements Initializable {
                 event.getTableView().refresh();
             }
         });
-        settingTable.setEditable(true);
     }
 
     private void bindColumns() {
@@ -127,7 +127,10 @@ public class SettingController implements Initializable {
             checkBox.setOnAction(event -> {
                 SettingTableRow settingTableRow = (SettingTableRow) checkBox.getUserData();
                 if (settingTableRow != null) {
+                    String oldSettingTableRow = settingTableRow.toString();
                     settingTableRow.setEnabled(checkBox.isSelected());
+                    String newSettingTableRow = settingTableRow.toString();
+                    updateLineInFile(oldSettingTableRow, newSettingTableRow);
                 }
             });
             return new TableCell<>() {
@@ -149,12 +152,7 @@ public class SettingController implements Initializable {
     private void loadSettings() {
         SettingLoader settingLoader = new SettingLoader("src/main/resources/setting.txt");
         Collection<SettingTableRow> settings;
-        try {
-            settings = settingLoader.loadSettings();
-        } catch (IOException e) {
-            e.printStackTrace();
-            settings = Collections.emptyList();
-        }
+        settings = settingLoader.loadSettings();
         settingTable.getItems().addAll(settings);
     }
 

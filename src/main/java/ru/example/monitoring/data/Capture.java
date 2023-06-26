@@ -17,6 +17,7 @@ public class Capture {
     private final TextField y1TextField;
     private final TextField x2TextField;
     private final TextField y2TextField;
+    private final TextField sensor;
 
     private EventHandler<MouseEvent> mouseReleasedHandler;
     private EventHandler<MouseEvent> mouseDraggedHandler;
@@ -31,6 +32,7 @@ public class Capture {
         this.y1TextField = (TextField) vBoxControl.lookup("#" + captureId + "|textField|Y1");
         this.x2TextField = (TextField) vBoxControl.lookup("#" + captureId + "|textField|X2");
         this.y2TextField = (TextField) vBoxControl.lookup("#" + captureId + "|textField|Y2");
+        this.sensor = (TextField) vBoxControl.lookup("#" + captureId + "|textField|sensor");
     }
 
     public String getCaptureId() {
@@ -51,6 +53,10 @@ public class Capture {
 
     public TextField getY2TextField() {
         return y2TextField;
+    }
+
+    public TextField getSensor() {
+        return sensor;
     }
 
     public EventHandler<MouseEvent> getMouseReleasedHandler() {

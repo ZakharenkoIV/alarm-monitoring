@@ -35,7 +35,11 @@ public class PageLoader {
         switch (pageName) {
             case "login" -> loader.setControllerFactory(c -> new LoginController(handlerManager));
             case "home" -> loader.setControllerFactory(c -> new HomeController(handlerManager, cameraManager));
-            case "setting" -> loader.setControllerFactory(c -> new SettingController(handlerManager));
+            case "setting" -> loader.setControllerFactory(c -> {
+                SettingController settingController = new SettingController(handlerManager);
+                cameraManager.setSettingController(settingController);
+                return settingController;
+            });
             case "camera" -> loader.setControllerFactory(c -> new CameraController(handlerManager, cameraManager));
             default -> {
                 logger.warning("Неизвестное имя страницы: " + pageName);

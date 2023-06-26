@@ -1,5 +1,7 @@
 package ru.example.monitoring.util;
 
+import javafx.geometry.Bounds;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -15,24 +17,29 @@ public class CaptureUtil {
         createRectangle(capture, camera);
     }
 
-    public static void drawRectanglesWithNewWidth(String cameraPageName, int oldWidth, int newWidth, Pane camera) {
-        double[] newPictureSize = calculateProportionalSize(newWidth, camera.getHeight());
-        List<Capture> captureList = CaptureMem.getCaptureList(cameraPageName);
+    public static void drawRectanglesWithNewWidth(String cameraPageName, Bounds bounds, Pane camera, Image image) {
+        double[] newPictureSize = calculateProportionalSize(bounds.getWidth(), bounds.getHeight(), image);
+        List<Capture> captureList = CaptureMem.getCaptureListForCameraPageName(cameraPageName);
         for (Capture capture : captureList) {
             updateCaptureRectangle(capture, newPictureSize[0], newPictureSize[1], camera);
         }
     }
 
-    public static void drawRectanglesWithNewHeight(String cameraPageName, int oldHeight, int newHeight, Pane camera) {
-        double[] newPictureSize = calculateProportionalSize(camera.getWidth(), newHeight);
-        List<Capture> captureList = CaptureMem.getCaptureList(cameraPageName);
+    public static void drawRectanglesWithNewHeight(String cameraPageName, Bounds bounds, Pane camera, Image image) {
+        double[] newPictureSize = calculateProportionalSize(bounds.getWidth(), bounds.getHeight(), image);
+        List<Capture> captureList = CaptureMem.getCaptureListForCameraPageName(cameraPageName);
         for (Capture capture : captureList) {
             updateCaptureRectangle(capture, newPictureSize[0], newPictureSize[1], camera);
         }
     }
 
-    public static double[] calculateProportionalSize(double cameraPaneWidth, double cameraPaneHeight) {
-        double aspectRatio = 1280.0 / 720.0;
+    public static double[] calculateProportionalSize(double cameraPaneWidth, double cameraPaneHeight, Image image) {
+        double aspectRatio;
+        if (image != null) {
+            aspectRatio = image.getWidth() / image.getHeight();
+        } else {
+            aspectRatio = 1280.0 / 720.0;
+        }
         double pictureWidth;
         double pictureHeight;
         if (cameraPaneWidth / aspectRatio <= cameraPaneHeight) {
@@ -70,20 +77,23 @@ public class CaptureUtil {
 
     private static void updateCaptureRectangle(Capture capture, double newWidth, double newHeight, Pane camera) {
         Rectangle rectangle = capture.getRectangle();
+        if (rectangle == null) {
+            return;
+        }
         camera.getChildren().remove(rectangle);
 
         double oldPixelX = rectangle.getX();
         double oldPixelY = rectangle.getY();
-        double oldScreenWidth = capture.getPictureWidth();
-        double oldScreenHeight = capture.getPictureHeight();
+        double oldWidth = rectangle.getWidth();
+        double oldHeight = rectangle.getHeight();
 
-        double newPixelX = (oldPixelX / oldScreenWidth) * newWidth;
-        double newPixelY = (oldPixelY / oldScreenHeight) * newHeight;
-        double widthRatio = newWidth / oldScreenWidth;
-        double heightRatio = newHeight / oldScreenHeight;
+        double widthRatio = newWidth / capture.getPictureWidth();
+        double heightRatio = newHeight / capture.getPictureHeight();
 
-        double newPixelWidth = rectangle.getWidth() * widthRatio;
-        double newPixelHeight = rectangle.getHeight() * heightRatio;
+        double newPixelX = oldPixelX / capture.getPictureWidth() * newWidth;
+        double newPixelY = oldPixelY / capture.getPictureHeight() * newHeight;
+        double newPixelWidth = oldWidth * widthRatio;
+        double newPixelHeight = oldHeight * heightRatio;
 
         recreateRectangle(capture, newPixelX, newPixelY, newPixelWidth, newPixelHeight, camera);
         capture.setPictureWidth(newWidth);

@@ -1,7 +1,8 @@
 package ru.example.monitoring.camera;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public interface CameraObserver {
-    void update(Image image);
+    ImageView update(Image image);
 }
