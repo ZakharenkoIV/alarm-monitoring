@@ -26,8 +26,7 @@ public class ImageTextExtractor {
     /**
      * Подготавливает изображение для извлечения текста.
      */
-    public static AreaData prepareImage(AreaData areaData) {
-        Mat originalImage = areaData.getMat();
+    public static Mat prepareImage(Mat originalImage) {
         // --- imageStep1: Вырезали область с зелёными цифрами ---
         Mat greenImage = extractGreenChannel(originalImage); // закрасили всё кроме зелёного
         Mat binaryImage = convertToBinary(greenImage); // преобразовали в чёрно- белый
@@ -42,10 +41,7 @@ public class ImageTextExtractor {
         List<Rect> contours = splitByContours(binaryImage2);
         List<Mat> regions = extractRegionsFromImage(contours, imageStep2);
         List<Mat> preparedImages = imageProcessing(regions);
-        Mat combineImages = combineImages(preparedImages);
-
-        areaData.setPreparedImage(combineImages);
-        return areaData;
+        return combineImages(preparedImages);
     }
 
     private static Mat combineImages(List<Mat> images) {

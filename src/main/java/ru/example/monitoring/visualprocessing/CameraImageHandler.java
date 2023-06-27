@@ -6,12 +6,13 @@ import net.sourceforge.tess4j.ITessAPI;
 import net.sourceforge.tess4j.Tesseract;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
-import org.opencv.imgcodecs.Imgcodecs;
 import ru.example.monitoring.data.AreaData;
 import ru.example.monitoring.data.CameraScreenshotData;
 import ru.example.monitoring.data.Capture;
+import ru.example.monitoring.integration.ClientMessageDispatcher;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,13 +24,17 @@ public class CameraImageHandler {
     private final ExecutorService imageProducerExecutors;
     private final ExecutorService imageConsumerExecutors;
     private final ExecutorService cutAreaConsumerExecutors;
+    private final ConditionChecker checker;
+    private final ClientMessageDispatcher clientMessageDispatcher;
 
-    public CameraImageHandler() {
+    public CameraImageHandler(ConditionChecker checker, ClientMessageDispatcher clientMessageDispatcher) {
         this.imageQueue = new LinkedBlockingQueue<>();
         this.cutAreaQueue = new LinkedBlockingQueue<>();
         this.imageProducerExecutors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         this.imageConsumerExecutors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         this.cutAreaConsumerExecutors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        this.checker = checker;
+        this.clientMessageDispatcher = clientMessageDispatcher;
     }
 
     public void imageProducerHandle(Runnable imageTask) {
@@ -50,8 +55,11 @@ public class CameraImageHandler {
             try {
                 CameraScreenshotData imageData = imageQueue.take();
                 for (Capture capture : imageData.getCaptures()) {
-                    cutAreaQueue.put(cutArea(imageData, capture));
-                    areaConsumerHandle();
+                    AreaData areaData = cutArea(imageData, capture);
+                    if (areaData.getParameter().isActive()) {
+                        cutAreaQueue.put(areaData);
+                        areaConsumerHandle();
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -62,15 +70,13 @@ public class CameraImageHandler {
     private void areaConsumerHandle() {
         cutAreaConsumerExecutors.submit(() -> {
             try {
-                AreaData area = cutAreaQueue.take();
-                AreaData result = ImageTextExtractor.prepareImage(area);
-                String resultString = ImageTextExtractor.recognizeText(result, tesseractThreadLocal.get());
-
-                System.out.println(resultString);
-                Imgcodecs.imwrite("src/main/resources/"
-                        .concat(area.getAreaName().replace("|", "-"))
-                        .concat(".jpg"), result.getPreparedImage()
-                );
+                AreaData areaData = cutAreaQueue.take();
+                Mat preparedImage = ImageTextExtractor.prepareImage(areaData.getMat());
+                areaData.setPreparedImage(preparedImage);
+                String recognizedValue = ImageTextExtractor.recognizeText(areaData, tesseractThreadLocal.get());
+                areaData.setActualValue(recognizedValue);
+                Optional<String> jsonWarningMessage = checker.check(areaData);
+                jsonWarningMessage.ifPresent(clientMessageDispatcher::send);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

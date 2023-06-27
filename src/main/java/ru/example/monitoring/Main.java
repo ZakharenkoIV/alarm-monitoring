@@ -5,9 +5,11 @@ import javafx.stage.Stage;
 import org.opencv.core.Core;
 import ru.example.monitoring.camera.CameraManager;
 import ru.example.monitoring.handler.HandlerManager;
+import ru.example.monitoring.integration.ClientMessageDispatcher;
 import ru.example.monitoring.loader.PageLoader;
 import ru.example.monitoring.navigation.NavigationManager;
 import ru.example.monitoring.visualprocessing.CameraImageHandler;
+import ru.example.monitoring.visualprocessing.ConditionChecker;
 
 public class Main extends Application {
 
@@ -27,7 +29,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(639);
 
         HandlerManager handlerManager = new HandlerManager();
-        CameraImageHandler cameraImageHandler = new CameraImageHandler();
+        CameraImageHandler cameraImageHandler = new CameraImageHandler(new ConditionChecker(), new ClientMessageDispatcher());
         CameraManager cameraManager = new CameraManager(cameraImageHandler);
         PageLoader pageLoader = new PageLoader(handlerManager, cameraManager);
         NavigationManager navigation = new NavigationManager(pageLoader);

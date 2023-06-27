@@ -3,6 +3,8 @@ package ru.example.monitoring.data;
 import org.opencv.core.Mat;
 import ru.example.monitoring.repository.mem.ParameterMem;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class AreaData {
@@ -12,6 +14,8 @@ public class AreaData {
     private Mat preparedImage;
     private final String areaName;
     private final String sensor;
+    private String actualValue;
+    private final String createTime;
 
     public AreaData(Mat area, String areaName, String sensor) {
         String adaptiveSensor = sensor.toUpperCase(Locale.ROOT).replace(",", ".");
@@ -19,6 +23,21 @@ public class AreaData {
         this.area = area;
         this.areaName = areaName;
         this.sensor = adaptiveSensor;
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        createTime = now.format(formatter);
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public String getActualValue() {
+        return actualValue;
+    }
+
+    public void setActualValue(String actualValue) {
+        this.actualValue = actualValue;
     }
 
     public Parameter getParameter() {
