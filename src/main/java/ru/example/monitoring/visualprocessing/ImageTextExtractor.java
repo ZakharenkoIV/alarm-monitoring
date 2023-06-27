@@ -1,6 +1,5 @@
 package ru.example.monitoring.visualprocessing;
 
-import net.sourceforge.tess4j.ITessAPI;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.opencv.core.*;
@@ -13,7 +12,10 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -341,13 +343,7 @@ public class ImageTextExtractor {
     /**
      * Распознает текст на изображении с помощью библиотеки Tesseract.
      */
-    public static String recognizeText(AreaData areaData) {
-        Tesseract tesseract = new Tesseract();
-        tesseract.setDatapath("src/main/resources/tessdata");
-        tesseract.setVariable("tessedit_char_whitelist", "0123456789.");
-        tesseract.setPageSegMode(ITessAPI.TessPageSegMode.PSM_SINGLE_LINE);
-        tesseract.setOcrEngineMode(ITessAPI.TessOcrEngineMode.OEM_DEFAULT);
-
+    public static String recognizeText(AreaData areaData, Tesseract tesseract) {
         Mat image = areaData.getPreparedImage();
         BufferedImage bufferedImage = matToBufferedImage(image);
         File tempFile;

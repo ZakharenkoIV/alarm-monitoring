@@ -2,6 +2,8 @@ package ru.example.monitoring.visualprocessing;
 
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Rectangle;
+import net.sourceforge.tess4j.ITessAPI;
+import net.sourceforge.tess4j.Tesseract;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -62,7 +64,7 @@ public class CameraImageHandler {
             try {
                 AreaData area = cutAreaQueue.take();
                 AreaData result = ImageTextExtractor.prepareImage(area);
-                String resultString = ImageTextExtractor.recognizeText(result);
+                String resultString = ImageTextExtractor.recognizeText(result, tesseractThreadLocal.get());
 
                 System.out.println(resultString);
                 Imgcodecs.imwrite("src/main/resources/"
@@ -75,9 +77,17 @@ public class CameraImageHandler {
         });
     }
 
+    private final ThreadLocal<Tesseract> tesseractThreadLocal = ThreadLocal.withInitial(() -> {
+        Tesseract tesseract = new Tesseract();
+        tesseract.setDatapath("src/main/resources/tessdata");
+        tesseract.setVariable("tessedit_char_whitelist", "0123456789.");
+        tesseract.setPageSegMode(ITessAPI.TessPageSegMode.PSM_SINGLE_LINE);
+        tesseract.setOcrEngineMode(ITessAPI.TessOcrEngineMode.OEM_DEFAULT);
+        return tesseract;
+    });
+
     private AreaData cutArea(CameraScreenshotData imageData, Capture capture) {
         Rectangle rectangle = capture.getRectangle();
-        ;
         String areaName = capture.getCaptureId();
         String sensorName = capture.getSensor().getText().toUpperCase(Locale.ROOT);
         int originScreenWidth = imageData.getScreenshot().width();
